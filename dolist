@@ -1,0 +1,49 @@
+def todo_list():
+    tasks = []
+    
+    while True:
+        print("\nTo-Do List Menu:")
+        print("1. Add Task")
+        print("2. View Tasks")
+        print("3. Mark Task as Done")
+        print("4. Exit")
+        
+        choice = input("Choose an option (1-4): ")
+        
+        if choice == '1':
+            task = input("Enter a new task: ")
+            tasks.append({"task": task, "done": False})
+            print(f"Added: {task}")
+        
+        elif choice == '2':
+            if not tasks:
+                print("No tasks yet!")
+            else:
+                print("\nTasks:")
+                for idx, task in enumerate(tasks, 1):
+                    status = "✓" if task["done"] else "✗"
+                    print(f"{idx}. [{status}] {task['task']}")
+        
+        elif choice == '3':
+            if not tasks:
+                print("No tasks to mark!")
+            else:
+                print("\nCurrent Tasks:")
+                for idx, task in enumerate(tasks, 1):
+                    print(f"{idx}. {task['task']}")
+                task_num = int(input("Enter task number to mark as done: ")) - 1
+                if 0 <= task_num < len(tasks):
+                    tasks[task_num]["done"] = True
+                    print("Task marked as done!")
+                else:
+                    print("Invalid task number!")
+        
+        elif choice == '4':
+            print("Exiting...")
+            break
+        
+        else:
+            print("Invalid choice!")
+
+
+todo_list()
