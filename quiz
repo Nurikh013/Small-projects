@@ -1,0 +1,46 @@
+def run_quiz():
+    questions = [
+        {
+            "question": "Which country has won the most FIFA World Cups?",
+            "choices": ["A) Germany", "B) Argentina", "C) Brazil", "D) Italy"],
+            "answer": "C"
+        },
+        {
+            "question": "Who is the all-time top scorer in the UEFA Champions League?",
+            "choices": ["A) Lionel Messi", "B) Robert Lewandowski", "C) Karim Benzema", "D) Cristiano Ronaldo"],
+            "answer": "D"
+        },
+        {
+            "question": "Which club has won the most English Premier League titles?",
+            "choices": ["A) Manchester United", "B) Liverpool", "C) Arsenal", "D) Chelsea"],
+            "answer": "A"
+        },
+        {
+            "question": "Who won the Ballon d'Or in 2023?",
+            "choices": ["A) Kylian Mbappé", "B) Lionel Messi", "C) Erling Haaland", "D) Kevin De Bruyne"],
+            "answer": "B"
+        },
+        {
+            "question": "Which nation hosted the 2022 FIFA World Cup?",
+            "choices": ["A) Russia", "B) Qatar", "C) USA", "D) South Africa"],
+            "answer": "B"
+        }
+    ]
+
+    score = 0
+    for i, q in enumerate(questions, 1):
+        print(f"\nQuestion {i}: {q['question']}")
+        for choice in q['choices']:
+            print(choice)
+        answer = input("Your answer (A/B/C/D): ").strip().upper()
+        if answer == q['answer']:
+            print("Correct!")
+            score += 1
+        else:
+            print(f"Wrong! The correct answer was {q['answer']}.")
+
+    print(f"\nYou got {score}/{len(questions)} correct.")
+
+
+if __name__ == "__main__":
+    run_quiz()
