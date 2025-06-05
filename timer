@@ -1,0 +1,107 @@
+import tkinter as tk
+from tkinter import messagebox
+import time
+
+class CountdownTimer:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Countdown Timer")
+        self.root.geometry("500x300")
+        self.root.resizable(False, False)
+        
+        self.is_running = False
+        self.remaining_time = 0
+       
+        self.label = tk.Label(root, text="Countdown Timer", font=("Arial", 20))
+        self.label.pack(pady=10)
+        
+        self.time_display = tk.Label(root, text="00:00:00", font=("Arial", 30))
+        self.time_display.pack(pady=20)
+        
+        self.input_frame = tk.Frame(root)
+        self.input_frame.pack()
+        
+        self.hours = tk.Spinbox(self.input_frame, from_=0, to=23, width=3, font=("Arial", 14))
+        self.hours.pack(side=tk.LEFT, padx=5)
+        tk.Label(self.input_frame, text="h").pack(side=tk.LEFT)
+        
+        self.minutes = tk.Spinbox(self.input_frame, from_=0, to=59, width=3, font=("Arial", 14))
+        self.minutes.pack(side=tk.LEFT, padx=5)
+        tk.Label(self.input_frame, text="m").pack(side=tk.LEFT)
+        
+        self.seconds = tk.Spinbox(self.input_frame, from_=0, to=59, width=3, font=("Arial", 14))
+        self.seconds.pack(side=tk.LEFT, padx=5)
+        tk.Label(self.input_frame, text="s").pack(side=tk.LEFT)
+        
+        self.button_frame = tk.Frame(root)
+        self.button_frame.pack(pady=20)
+        
+        self.start_button = tk.Button(self.button_frame, text="Start", command=self.start_timer, width=10)
+        self.start_button.pack(side=tk.LEFT, padx=10)
+        
+        self.pause_button = tk.Button(self.button_frame, text="Pause", command=self.pause_timer, state=tk.DISABLED, width=10)
+        self.pause_button.pack(side=tk.LEFT, padx=10)
+        
+        self.reset_button = tk.Button(self.button_frame, text="Reset", command=self.reset_timer, state=tk.DISABLED, width=10)
+        self.reset_button.pack(side=tk.LEFT, padx=10)
+    
+    def start_timer(self):
+        if not self.is_running:
+            hours = int(self.hours.get())
+            minutes = int(self.minutes.get())
+            seconds = int(self.seconds.get())
+            
+            self.remaining_time = hours * 3600 + minutes * 60 + seconds
+            
+            if self.remaining_time <= 0:
+                messagebox.showwarning("Warning", "Please set a valid time!")
+                return
+            
+            self.is_running = True
+            self.start_button.config(state=tk.DISABLED)
+            self.pause_button.config(state=tk.NORMAL)
+            self.reset_button.config(state=tk.NORMAL)
+            self.hours.config(state=tk.DISABLED)
+            self.minutes.config(state=tk.DISABLED)
+            self.seconds.config(state=tk.DISABLED)
+            
+            self.update_timer()
+    
+    def pause_timer(self):
+        if self.is_running:
+            self.is_running = False
+            self.pause_button.config(text="Resume")
+        else:
+            self.is_running = True
+            self.pause_button.config(text="Pause")
+            self.update_timer()
+    
+    def reset_timer(self):
+        self.is_running = False
+        self.remaining_time = 0
+        self.time_display.config(text="00:00:00")
+        self.start_button.config(state=tk.NORMAL)
+        self.pause_button.config(state=tk.DISABLED, text="Pause")
+        self.reset_button.config(state=tk.DISABLED)
+        self.hours.config(state=tk.NORMAL)
+        self.minutes.config(state=tk.NORMAL)
+        self.seconds.config(state=tk.NORMAL)
+    
+    def update_timer(self):
+        if self.is_running and self.remaining_time > 0:
+            hours = self.remaining_time // 3600
+            minutes = (self.remaining_time % 3600) // 60
+            seconds = self.remaining_time % 60
+            
+            self.time_display.config(text=f"{hours:02d}:{minutes:02d}:{seconds:02d}")
+            self.remaining_time -= 1
+            self.root.after(1000, self.update_timer)
+        elif self.remaining_time <= 0 and self.is_running:
+            self.is_running = False
+            messagebox.showinfo("Time's up!", "The countdown has finished!")
+            self.reset_timer()
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = CountdownTimer(root)
+    root.mainloop() 
